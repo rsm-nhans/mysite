@@ -1,0 +1,15 @@
+---
+title: "Namaah Hans"
+image: "namaah1.jpg"
+about: 
+   template: jolla
+   links:
+     - icon: envelope
+       href: mailto:nhans@ucsd.edu
+     - icon: linkedin
+       href: https://www.linkedin.com/in/namaahhans/
+---
+
+This is a Quarto website.
+
+To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
