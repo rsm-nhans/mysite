@@ -7,5 +7,14 @@
   },
   "about.qmd": {
     "about.html": "e748d175"
+  },
+  "projects/project1/index.qmd": {
+    "index.html": "44cb86fc"
+  },
+  "projects/project2/index.qmd": {
+    "index.html": "f4fbbd1d"
+  },
+  "projects.qmd": {
+    "projects.html": "b0d61a13"
   }
 }

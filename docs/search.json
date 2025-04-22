@@ -12,5 +12,26 @@
     "title": "Namaah Hans",
     "section": "",
     "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "My Projects",
+    "section": "",
+    "text": "Analysis of Cars\n\n\n\n\n\n\nNamaah Hans\n\n\nApr 21, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "projects/project1/index.html",
+    "href": "projects/project1/index.html",
+    "title": "Analysis of Cars",
+    "section": "",
+    "text": "Let’s investigate the relationship between fuel efficiency (mpg) and engine displacement (disp) using the seaborn and pandas libraries.\n\n\n\n\nCode\nimport seaborn as sns\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom scipy.stats import pearsonr\n\n# Load dataset\nmpg = sns.load_dataset(\"mpg\").dropna()\n\n# Compute correlation\ncorr, _ = pearsonr(mpg[\"mpg\"], mpg[\"displacement\"])\nprint(f\"Correlation: {corr:.2f}\")\n\n# Plot\nsns.scatterplot(data=mpg, x=\"mpg\", y=\"displacement\", color=\"dodgerblue\")\nplt.title(\"MPG vs Displacement\")\nplt.xlabel(\"Miles per Gallon\")\nplt.ylabel(\"Engine Displacement\")\nplt.tight_layout()\nplt.show()\n\n\nCorrelation: -0.81"
+  },
+  {
+    "objectID": "projects/project1/index.html#sub-header",
+    "href": "projects/project1/index.html#sub-header",
+    "title": "Analysis of Cars",
+    "section": "",
+    "text": "Code\nimport seaborn as sns\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom scipy.stats import pearsonr\n\n# Load dataset\nmpg = sns.load_dataset(\"mpg\").dropna()\n\n# Compute correlation\ncorr, _ = pearsonr(mpg[\"mpg\"], mpg[\"displacement\"])\nprint(f\"Correlation: {corr:.2f}\")\n\n# Plot\nsns.scatterplot(data=mpg, x=\"mpg\", y=\"displacement\", color=\"dodgerblue\")\nplt.title(\"MPG vs Displacement\")\nplt.xlabel(\"Miles per Gallon\")\nplt.ylabel(\"Engine Displacement\")\nplt.tight_layout()\nplt.show()\n\n\nCorrelation: -0.81"
   }
 ]

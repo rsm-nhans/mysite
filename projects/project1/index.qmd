@@ -1,0 +1,38 @@
+---
+title: "Analysis of Cars"
+author: Namaah Hans
+date: April 21, 2025
+format:
+  html:
+    code-fold: true
+---
+
+# Header
+
+Let's investigate the relationship between fuel efficiency (`mpg`) and engine displacement (`disp`) using the `seaborn` and `pandas` libraries.
+
+## Sub-Header
+```{python}
+#| echo: true
+#| message: false
+
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import pearsonr
+
+# Load dataset
+mpg = sns.load_dataset("mpg").dropna()
+
+# Compute correlation
+corr, _ = pearsonr(mpg["mpg"], mpg["displacement"])
+print(f"Correlation: {corr:.2f}")
+
+# Plot
+sns.scatterplot(data=mpg, x="mpg", y="displacement", color="dodgerblue")
+plt.title("MPG vs Displacement")
+plt.xlabel("Miles per Gallon")
+plt.ylabel("Engine Displacement")
+plt.tight_layout()
+plt.show()
+```
