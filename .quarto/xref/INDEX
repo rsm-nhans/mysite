@@ -16,5 +16,11 @@
   },
   "projects.qmd": {
     "projects.html": "b0d61a13"
+  },
+  "projects/hw1-abtest/hw1_questions.qmd": {
+    "hw1_questions.html": "b6132032"
+  },
+  "projects/hw1-abtest/index.qmd": {
+    "index.html": "f586a615"
   }
 }
