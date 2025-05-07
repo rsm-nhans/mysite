@@ -22,5 +22,8 @@
   },
   "projects/hw1-abtest/index.qmd": {
     "index.html": "f586a615"
+  },
+  "projects/hw2-mle/index.qmd": {
+    "index.html": "c8883a40"
   }
 }
