@@ -1,0 +1,163 @@
+---
+title: "K-Means Clustering with Palmer Penguins"
+author: "Namaah Hans"
+date: today
+format: html
+---
+
+## 1a. K-Means
+
+We begin by loading the Palmer Penguins dataset and selecting only two numeric features: `bill_length_mm` and `flipper_length_mm`. These will be the input variables for clustering.
+
+```{r}
+library(tidyverse)
+library(cluster)
+
+# Load and clean data
+penguins <- read_csv("palmer_penguins.csv") %>%
+  drop_na(bill_length_mm, flipper_length_mm) %>%
+  select(bill_length_mm, flipper_length_mm)
+
+my_kmeans <- function(data, k, max_iter = 100){
+  set.seed(123)
+  n <- nrow(data)
+  centers <- data[sample(1:n, k), ]
+  cluster_assignments <- rep(0, n)
+
+  for (i in 1:max_iter){
+    # Assign clusters
+    dists <- as.matrix(dist(rbind(centers, data)))[1:k, (k+1):(k+n)]
+    cluster_assignments <- apply(dists, 2, which.min)
+
+    # Recompute centers
+    new_centers <- sapply(1:k, function(j){
+      colMeans(data[cluster_assignments == j, ])
+    })
+    new_centers <- t(new_centers)
+
+    if (all(centers == new_centers)) break
+    centers <- new_centers
+  }
+
+  return(list(clusters = cluster_assignments, centers = centers))
+}
+
+result <- my_kmeans(penguins, k = 3)
+penguins$cluster_custom <- as.factor(result$clusters)
+
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = cluster_custom)) +
+  geom_point(size = 2) +
+  labs(title = "Custom K-Means Clustering (k = 3)")
+```
+
+The plot shows the clusters formed by my custom K-Means algorithm (k = 3). The separation looks reasonable, confirming that the implementation works as expected.
+
+```{r}
+k_builtin <- kmeans(penguins, centers = 3)
+penguins$cluster_builtin <- as.factor(k_builtin$cluster)
+
+ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = cluster_builtin)) +
+  geom_point(size = 2) +
+  labs(title = "Built-in KMeans Clustering (k = 3)")
+```
+
+The built-in KMeans function (k = 3) produces similar clusters, validating the results from the custom implementation.
+
+```{r}
+library(cluster)
+
+wcss <- numeric()
+silhouette_scores <- numeric()
+
+for (k in 2:7) {
+  set.seed(1)
+  km_out <- kmeans(penguins, centers = k, nstart = 10)
+  wcss[k] <- km_out$tot.withinss
+
+  sil <- silhouette(km_out$cluster, dist(penguins))
+  silhouette_scores[k] <- mean(sil[, 3])
+}
+
+
+# Elbow Plot
+plot(2:7, wcss[2:7], type = "b", pch = 19,
+     xlab = "Number of Clusters (k)",
+     ylab = "Within-Cluster Sum of Squares",
+     main = "Elbow Method")
+```
+
+The elbow plot suggests that 3 clusters is a good choice, as the rate of improvement in WCSS slows significantly after k = 3.
+
+```{r}
+# Silhouette Plot
+plot(2:7, silhouette_scores[2:7], type = "b", pch = 19,
+     xlab = "Number of Clusters (k)",
+     ylab = "Silhouette Score",
+     main = "Silhouette Analysis")
+
+```
+
+The silhouette scores are highest at k = 2, but k = 3 still provides a reasonable balance with better separation than higher k values.
+
+
+## 2a. K Nearest Neighbors
+
+```{r}
+# gen data -----
+set.seed(42)
+n <- 100
+x1 <- runif(n, -3, 3)
+x2 <- runif(n, -3, 3)
+x <- cbind(x1, x2)
+
+# define a wiggly boundary
+boundary <- sin(4*x1) + x1
+y <- ifelse(x2 > boundary, 1, 0) |> as.factor()
+dat <- data.frame(x1 = x1, x2 = x2, y = y)
+
+### Plot the training data
+```
+We visualize the synthetic data with `x1` on the x-axis, `x2` on the y-axis, and color-coded by class `y`.
+
+```{r}
+library(ggplot2)
+
+ggplot(dat, aes(x = x1, y = x2, color = y)) +
+  geom_point(size = 2) +
+  labs(title = "Training Data with Wiggly Boundary",
+       x = "x1", y = "x2")
+```
+
+The plot shows two classes separated by a non-linear (wiggly) boundary, making it ideal for testing KNN performance.
+
+```{r}
+set.seed(99)
+x1_test <- runif(n, -3, 3)
+x2_test <- runif(n, -3, 3)
+boundary_test <- sin(4*x1_test) + x1_test
+y_test <- ifelse(x2_test > boundary_test, 1, 0) |> as.factor()
+test_dat <- data.frame(x1 = x1_test, x2 = x2_test, y = y_test)
+
+
+
+library(class)
+
+k_values <- 1:30
+accuracy <- numeric(length(k_values))
+
+for (k in k_values) {
+  pred <- knn(train = dat[, 1:2],
+              test = test_dat[, 1:2],
+              cl = dat$y,
+              k = k)
+  accuracy[k] <- mean(pred == test_dat$y)
+}
+
+
+plot(k_values, accuracy, type = "b", pch = 19,
+     xlab = "k (Number of Neighbors)",
+     ylab = "Test Set Accuracy",
+     main = "KNN Accuracy for k = 1 to 30")
+
+```
+Test accuracy fluctuates across values of k, with the best performance observed around k = 29–30.
